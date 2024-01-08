@@ -1,15 +1,16 @@
 ﻿using MyProject;
 
 Dice dice = new Dice();
-Dice diceEnemy = new Dice(7);
+int round = 1;
+string win = null;
 
-Fighter fighter1 = new Fighter("Anakin Skywalker", "Light", 200, 500, 150, 20, 40, 10, dice);
-Fighter fighter2 = new Fighter("Obi-wan Kenobi", "Light", 300, 450, 150, 30, 50, 60, dice);
-Fighter fighter3 = new Fighter("Master Windu", "Light", 300, 600, 100, 100, 100, 100, dice);
-Fighter fighter4 = new Fighter("Emperor Palpatine", "Dark", 1000, 1000, 200, 200, 10, 10, dice);
-Fighter fighter5 = new Fighter("Darth Maul", "Dark", 500, 100, 50, 60, 300, 200, dice);
-Fighter fighter6 = new Fighter("Wicket the Ewok", "Light", 100, 0, 0, 0, 500, 300, dice);
-Fighter fighter7 = new Fighter("Bossk the Hunter", "Neutral", 1000, 0, 0, 0, 300, 500, dice);
+Fighter fighter1 = new Fighter("Anakin Skywalker", "Light", 20, 50, 15, 2, 4, 1, dice);
+Fighter fighter2 = new Fighter("Obi-wan Kenobi", "Light", 30, 45, 15, 3, 5, 6, dice);
+Fighter fighter3 = new Fighter("Master Windu", "Light", 30, 60, 10, 10, 10, 10, dice);
+Fighter fighter4 = new Fighter("Emperor Palpatine", "Dark", 100, 100, 20, 20, 1, 1, dice);
+Fighter fighter5 = new Fighter("Darth Maul", "Dark", 50, 10, 5, 6, 30, 20, dice);
+Fighter fighter6 = new Fighter("Wicket the Ewok", "Light", 10, 0, 0, 0, 50, 30, dice);
+Fighter fighter7 = new Fighter("Bossk the Hunter", "Neutral", 100, 0, 0, 0, 30, 50, dice);
 
 
 Console.WriteLine("Possible fighters:");
@@ -24,64 +25,85 @@ Console.WriteLine("7 - {0}", fighter7.ToString());
 Console.Write("Write number of your fighter:");
 int challengerNum = int.Parse(Console.ReadLine());
 
-string challenger;
-string enemy;
-int enemyNum = diceEnemy.Roll();
+Fighter challenger;
+Fighter enemy;
+Random ranEnemy = new Random();
+int enemyNum = challengerNum;
     
-if (enemyNum == challengerNum)
-   enemyNum = diceEnemy.Roll();
+while (enemyNum == challengerNum)
+   enemyNum = ranEnemy.Next(1,8);
 
 
     
 
 
 if (challengerNum == 1)
-    challenger = fighter1.ToString();
+    challenger = fighter1;
 else
     if (challengerNum == 2)
-        challenger = fighter2.ToString();
+        challenger = fighter2;
 else
    if (challengerNum == 3)
-        challenger = fighter3.ToString();
+        challenger = fighter3;
 else
    if (challengerNum == 4)
-        challenger = fighter4.ToString();
+        challenger = fighter4;
 else
    if (challengerNum == 5)
-        challenger = fighter5.ToString();
+        challenger = fighter5;
 else
    if (challengerNum == 6)
-    challenger = fighter6.ToString();
+    challenger = fighter6;
 else
-   challenger = fighter7.ToString();
+   challenger = fighter7;
 
-Console.WriteLine("You chose {0}", challenger);
+Console.WriteLine("You chose: {0}", challenger.ToString());
 
 if (enemyNum == 1)
-    enemy = fighter1.ToString();
+    enemy = fighter1;
 else
     if (enemyNum == 2)
-    enemy = fighter2.ToString();
+    enemy = fighter2;
 else
    if (enemyNum == 3)
-    enemy = fighter3.ToString();
+    enemy = fighter3;
 else
    if (enemyNum == 4)
-    enemy = fighter4.ToString();
+    enemy = fighter4;
 else
    if (enemyNum == 5)
-    enemy = fighter5.ToString();
+    enemy = fighter5;
 else
-   if (enemyNum == 6)
-    enemy = fighter6.ToString();
+   if (enemyNum == 6)   
+    enemy = fighter6;
 else
-    enemy = fighter7.ToString();
+    enemy = fighter7;
 
-Console.WriteLine("Your enemy is: {0}", enemy);
+Console.WriteLine("Your enemy is: {0}", enemy.ToString());
+while ((enemy.Alive() && challenger.Alive()))
+{
+    
+    Console.WriteLine("-----------------------");
+    Console.WriteLine("ROUND {0}:", round);
+    Console.WriteLine("-----------------------");
+    challenger.ForceHit(enemy);
+    enemy.ForceHit(challenger);
+    Console.WriteLine("Životy po útoku:");
+    Console.WriteLine("{0}: {1}", challenger.ToString(), challenger.LifeBar());
 
-
-
-
-
-
+    Console.WriteLine("{0}: {1}", enemy.ToString(), enemy.LifeBar());
+    round++;
+    Thread.Sleep(1000);
+    if ((!enemy.Alive()))
+    { 
+        win = challenger.ToString();
+    }
+    if ((!challenger.Alive()))
+    {
+        win = enemy.ToString();
+    }
+}
+Console.WriteLine("-----------------------");
+Console.WriteLine("-----------------------");
+Console.WriteLine("Fight ended. The winner of this migthy figt is: {0}!!. Press any key to end.", win);
 Console.ReadKey();
